@@ -1,0 +1,692 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Adnan & Raghad | Batman Team 11/11</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts: Cairo & Tajawal -->
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;900&family=Tajawal:wght@400;700;900&display=swap" rel="stylesheet">
+    <!-- Canvas Confetti -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        romantic: {
+                            50: '#fff1f2',
+                            100: '#ffe4e6',
+                            200: '#fecdd3',
+                            500: '#e11d48',
+                            600: '#be123c',
+                            800: '#9f1239',
+                            900: '#4c0519',
+                            dark: '#1a050b',
+                            gold: '#fbbf24',
+                            golddark: '#d97706'
+                        }
+                    },
+                    fontFamily: {
+                        cairo: ['Cairo', 'sans-serif'],
+                        tajawal: ['Tajawal', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            font-family: 'Cairo', sans-serif;
+            background: linear-gradient(135deg, #1a050b 0%, #3b0713 50%, #4c0519 100%);
+            color: #fff1f2;
+            overflow-x: hidden;
+            min-height: 100vh;
+        }
+
+        /* Ambient floating hearts background */
+        .hearts-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+            overflow: hidden;
+        }
+
+        .floating-heart {
+            position: absolute;
+            list-style: none;
+            display: block;
+            width: 20px;
+            height: 20px;
+            opacity: 0.3;
+            bottom: -150px;
+            animation: animate 25s linear infinite;
+        }
+
+        @keyframes animate {
+            0% {
+                transform: translateY(0) rotate(0deg);
+                opacity: 0.6;
+                border-radius: 0;
+            }
+            100% {
+                transform: translateY(-1000px) rotate(720deg);
+                opacity: 0;
+                border-radius: 50%;
+            }
+        }
+
+        /* Glassmorphism card styles */
+        .glass-card {
+            background: rgba(45, 10, 20, 0.55);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(251, 191, 36, 0.2);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+        }
+
+        .glass-card-hover {
+            transition: all 0.3s ease;
+        }
+
+        .glass-card-hover:hover {
+            transform: translateY(-5px);
+            border-color: rgba(251, 191, 36, 0.5);
+            box-shadow: 0 12px 40px 0 rgba(225, 29, 72, 0.3);
+        }
+
+        /* Wheel Canvas Styling */
+        #wheelCanvas {
+            max-width: 100%;
+            height: auto;
+            filter: drop-shadow(0px 0px 12px rgba(251, 191, 36, 0.4));
+        }
+
+        /* Glowing text effect */
+        .glow-text {
+            text-shadow: 0 0 15px rgba(225, 29, 72, 0.8), 0 0 25px rgba(251, 191, 36, 0.4);
+        }
+
+        .glow-gold {
+            text-shadow: 0 0 10px rgba(251, 191, 36, 0.7);
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #1a050b;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #be123c;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #fbbf24;
+        }
+    </style>
+</head>
+<body class="relative flex flex-col items-center justify-between min-h-screen pb-12">
+
+    <!-- Floating Background Particles -->
+    <ul class="hearts-bg" id="heartsBg"></ul>
+
+    <!-- Header / Hero Section -->
+    <header class="w-full max-w-4xl pt-10 px-4 text-center z-10">
+        <!-- Batman & Hearts Emblem -->
+        <div class="inline-flex items-center justify-center space-x-3 space-x-reverse mb-4 bg-romantic-900/60 border border-romantic-gold/30 px-6 py-2 rounded-full backdrop-blur-md">
+            <i class="fa-solid me-2 fa-mask text-romantic-gold text-xl animate-pulse"></i>
+            <span class="font-bold text-romantic-gold tracking-widest text-sm md:text-base">BATMAN TEAM</span>
+            <i class="fa-solid ms-2 fa-heart text-romantic-500 text-xl animate-bounce"></i>
+        </div>
+
+        <h1 class="text-4xl md:text-6xl font-black mb-3 glow-text text-white">
+            عدنان <span class="text-romantic-gold">&amp;</span> رغد
+        </h1>
+
+        <p class="text-lg md:text-xl text-romantic-100 font-light max-w-2xl mx-auto leading-relaxed">
+            بمناسبة <span class="text-romantic-gold font-semibold underline decoration-romantic-500 decoration-2">يوم الحب العالمي (11/11)</span>، بحب قدملك هاد العالم الخاص اللي بشرفني انو كون معك فيه ❤️
+        </p>
+    </header>
+
+    <!-- Main Content Area -->
+    <main class="w-full max-w-4xl px-4 mt-8 space-y-12 z-10">
+
+        <!-- Countdown / Elapsed Relationship Timer -->
+        <section class="glass-card rounded-3xl p-6 md:p-8 text-center glass-card-hover relative overflow-hidden">
+            <div class="absolute -top-10 -right-10 w-32 h-32 bg-romantic-500/10 rounded-full blur-2xl"></div>
+            
+            <h2 class="text-xl md:text-2xl font-bold mb-2 text-romantic-gold flex items-center justify-center gap-2">
+                <i class="fa-solid fa-clock-rotate-left"></i>
+                بداية حكايتنا الجميلة (13 / 9 / 2026)
+            </h2>
+            <p class="text-sm text-romantic-200 mb-6">الوقت اللي قضيناه سوا وبدأت فيه أحلى أيام حياتنا</p>
+
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4" id="timerContainer">
+                <div class="bg-romantic-900/80 border border-romantic-500/30 p-4 rounded-2xl">
+                    <span id="days" class="text-3xl md:text-5xl font-black text-white glow-gold block">0</span>
+                    <span class="text-xs md:text-sm text-romantic-200 mt-1 block">يوم</span>
+                </div>
+                <div class="bg-romantic-900/80 border border-romantic-500/30 p-4 rounded-2xl">
+                    <span id="hours" class="text-3xl md:text-5xl font-black text-white glow-gold block">0</span>
+                    <span class="text-xs md:text-sm text-romantic-200 mt-1 block">ساعة</span>
+                </div>
+                <div class="bg-romantic-900/80 border border-romantic-500/30 p-4 rounded-2xl">
+                    <span id="minutes" class="text-3xl md:text-5xl font-black text-white glow-gold block">0</span>
+                    <span class="text-xs md:text-sm text-romantic-200 mt-1 block">دقيقة</span>
+                </div>
+                <div class="bg-romantic-900/80 border border-romantic-500/30 p-4 rounded-2xl">
+                    <span id="seconds" class="text-3xl md:text-5xl font-black text-white glow-gold block">0</span>
+                    <span class="text-xs md:text-sm text-romantic-200 mt-1 block">ثانية</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- GAME 1: Love Meter -->
+        <section class="glass-card rounded-3xl p-6 md:p-8 text-center glass-card-hover">
+            <h2 class="text-2xl font-bold text-romantic-gold mb-2 flex items-center justify-center gap-2">
+                <i class="fa-solid fa-heart-circle-bolt text-romantic-500"></i>
+                اللعبة الأولى: كم نسبة حبك لباتمانك؟ 🦇❤️
+            </h2>
+            <p class="text-sm text-romantic-200 mb-6">احسبي مقياس الحب وشوفي العداد لوين حيوصل!</p>
+
+            <div class="max-w-md mx-auto space-y-4">
+                <div class="relative w-full h-8 bg-romantic-900/80 rounded-full overflow-hidden border border-romantic-gold/30">
+                    <div id="loveBar" class="h-full bg-gradient-to-r from-romantic-800 via-romantic-500 to-romantic-gold w-0 transition-all duration-300 rounded-full flex items-center justify-end pr-3">
+                        <span id="lovePercentage" class="text-xs font-bold text-white drop-shadow">0%</span>
+                    </div>
+                </div>
+
+                <div id="loveMessage" class="h-8 font-bold text-lg text-romantic-gold flex items-center justify-center">
+                    اضغطي على الزر لقياس درجة الحب!
+                </div>
+
+                <button onclick="boostLove()" class="w-full md:w-auto px-8 py-3 bg-gradient-to-r from-romantic-600 to-romantic-800 hover:from-romantic-500 hover:to-romantic-700 text-white font-bold rounded-full shadow-lg transform active:scale-95 transition-all border border-romantic-gold/50 flex items-center justify-center gap-2 mx-auto">
+                    <i class="fa-solid fa-heart-pulse text-xl"></i>
+                    زيدي نسبة الحب الآن!
+                </button>
+            </div>
+        </section>
+
+        <!-- GAME 2: Adnan Preferences Quiz -->
+        <section class="glass-card rounded-3xl p-6 md:p-8 glass-card-hover">
+            <h2 class="text-2xl font-bold text-romantic-gold mb-2 text-center flex items-center justify-center gap-2">
+                <i class="fa-solid fa-circle-question"></i>
+                اللعبة الثانية: أسرار تفضيلات عدنان! 🕵️‍♂️
+            </h2>
+            <p class="text-sm text-romantic-200 mb-6 text-center">اختبري معرفتك بأشياء بحبها عدنان جداً</p>
+
+            <div class="space-y-6 max-w-2xl mx-auto">
+                <!-- Question 1 -->
+                <div class="bg-romantic-900/40 p-5 rounded-2xl border border-romantic-500/20">
+                    <p class="font-bold text-lg text-white mb-3">1. ما هي الأكلات والمشروبات المفضلات عند عدنان؟ (اختاري التوأم المفضّل)</p>
+                    <div class="grid grid-cols-2 md:grid-cols-3 gap-2" id="q1Options">
+                        <button onclick="checkQ1('بيتزا', this)" class="p-3 bg-romantic-900/80 hover:bg-romantic-800 border border-romantic-500/30 rounded-xl text-center text-sm font-semibold">بيتزا</button>
+                        <button onclick="checkQ1('كبسة', this)" class="p-3 bg-romantic-900/80 hover:bg-romantic-800 border border-romantic-500/30 rounded-xl text-center text-sm font-semibold">كبسة ✨</button>
+                        <button onclick="checkQ1('ماتشا', this)" class="p-3 bg-romantic-900/80 hover:bg-romantic-800 border border-romantic-500/30 rounded-xl text-center text-sm font-semibold">ماتشا</button>
+                        <button onclick="checkQ1('نسكافيه', this)" class="p-3 bg-romantic-900/80 hover:bg-romantic-800 border border-romantic-500/30 rounded-xl text-center text-sm font-semibold">نسكافيه</button>
+                        <button onclick="checkQ1('قهوة', this)" class="p-3 bg-romantic-900/80 hover:bg-romantic-800 border border-romantic-500/30 rounded-xl text-center text-sm font-semibold">قهوة ☕</button>
+                    </div>
+                    <div id="q1Feedback" class="mt-2 text-xs text-romantic-gold font-semibold min-h-[1.5rem]"></div>
+                </div>
+
+                <!-- Question 2 -->
+                <div class="bg-romantic-900/40 p-5 rounded-2xl border border-romantic-500/20">
+                    <p class="font-bold text-lg text-white mb-3">2. ما أكثر شيء يعشقه عدنان في رغودته؟ 💖</p>
+                    <div class="grid grid-cols-3 gap-3">
+                        <button onclick="checkQ2('عيونك', this)" class="p-3 bg-romantic-900/80 hover:bg-romantic-800 border border-romantic-500/30 rounded-xl text-center text-sm font-semibold">عيونك 👁️</button>
+                        <button onclick="checkQ2('شفايفك', this)" class="p-3 bg-romantic-900/80 hover:bg-romantic-800 border border-romantic-500/30 rounded-xl text-center text-sm font-semibold">شفايفك 💋</button>
+                        <button onclick="checkQ2('قلبك', this)" class="p-3 bg-romantic-900/80 hover:bg-romantic-800 border border-romantic-500/30 rounded-xl text-center text-sm font-semibold">قلبك ❤️</button>
+                    </div>
+                    <div id="q2Feedback" class="mt-2 text-xs text-romantic-gold font-semibold min-h-[1.5rem]"></div>
+                </div>
+
+                <!-- Question 3 -->
+                <div class="bg-romantic-900/40 p-5 rounded-2xl border border-romantic-500/20">
+                    <p class="font-bold text-lg text-white mb-3">3. ما هي الهواية الأحب إلى قلب عدنان؟ ✈️</p>
+                    <div class="grid grid-cols-3 gap-3">
+                        <button onclick="checkQ3('السفر', this)" class="p-3 bg-romantic-900/80 hover:bg-romantic-800 border border-romantic-500/30 rounded-xl text-center text-sm font-semibold">السفر 🌍</button>
+                        <button onclick="checkQ3('الهدوء', this)" class="p-3 bg-romantic-900/80 hover:bg-romantic-800 border border-romantic-500/30 rounded-xl text-center text-sm font-semibold">الهدوء 🤫</button>
+                        <button onclick="checkQ3('ألعاب فيديو', this)" class="p-3 bg-romantic-900/80 hover:bg-romantic-800 border border-romantic-500/30 rounded-xl text-center text-sm font-semibold">ألعاب فيديو 🎮</button>
+                    </div>
+                    <div id="q3Feedback" class="mt-2 text-xs text-romantic-gold font-semibold min-h-[1.5rem]"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- GAME 3: Would You Rather -->
+        <section class="glass-card rounded-3xl p-6 md:p-8 glass-card-hover">
+            <h2 class="text-2xl font-bold text-romantic-gold mb-2 text-center flex items-center justify-center gap-2">
+                <i class="fa-solid fa-code-compare"></i>
+                اللعبة الثالثة: لو خيروك؟ 🤔
+            </h2>
+            <p class="text-sm text-romantic-200 mb-6 text-center">اختاري خيارك المفضل ورؤية النتيجة المشتركة!</p>
+
+            <div class="space-y-4 max-w-xl mx-auto">
+                <!-- Choice 1 -->
+                <div class="bg-romantic-900/60 p-4 rounded-2xl border border-romantic-500/20 flex items-center justify-between gap-4">
+                    <button onclick="selectOption(this, 1)" class="w-1/2 p-3 bg-romantic-800/80 hover:bg-romantic-600 border border-romantic-500/40 rounded-xl text-center font-bold text-sm transition-all">
+                        🍵 ماتشا
+                    </button>
+                    <span class="text-romantic-gold font-bold text-xs">أو</span>
+                    <button onclick="selectOption(this, 1)" class="w-1/2 p-3 bg-romantic-800/80 hover:bg-romantic-600 border border-romantic-500/40 rounded-xl text-center font-bold text-sm transition-all">
+                        🍣 سوشي
+                    </button>
+                </div>
+
+                <!-- Choice 2 -->
+                <div class="bg-romantic-900/60 p-4 rounded-2xl border border-romantic-500/20 flex items-center justify-between gap-4">
+                    <button onclick="selectOption(this, 2)" class="w-1/2 p-3 bg-romantic-800/80 hover:bg-romantic-600 border border-romantic-500/40 rounded-xl text-center font-bold text-sm transition-all">
+                        🏙️ دبي
+                    </button>
+                    <span class="text-romantic-gold font-bold text-xs">أو</span>
+                    <button onclick="selectOption(this, 2)" class="w-1/2 p-3 bg-romantic-800/80 hover:bg-romantic-600 border border-romantic-500/40 rounded-xl text-center font-bold text-sm transition-all">
+                        🏔️ سويسرا
+                    </button>
+                </div>
+
+                <!-- Choice 3 -->
+                <div class="bg-romantic-900/60 p-4 rounded-2xl border border-romantic-500/20 flex items-center justify-between gap-4">
+                    <button onclick="selectOption(this, 3)" class="w-1/2 p-3 bg-romantic-800/80 hover:bg-romantic-600 border border-romantic-500/40 rounded-xl text-center font-bold text-sm transition-all">
+                        🌲 الطبيعة
+                    </button>
+                    <span class="text-romantic-gold font-bold text-xs">أو</span>
+                    <button onclick="selectOption(this, 3)" class="w-1/2 p-3 bg-romantic-800/80 hover:bg-romantic-600 border border-romantic-500/40 rounded-xl text-center font-bold text-sm transition-all">
+                        🌊 البحر
+                    </button>
+                </div>
+
+                <!-- Choice 4 -->
+                <div class="bg-romantic-900/60 p-4 rounded-2xl border border-romantic-500/20 flex items-center justify-between gap-4">
+                    <button onclick="selectOption(this, 4, true)" class="w-1/2 p-3 bg-romantic-800/80 hover:bg-romantic-600 border border-romantic-gold rounded-xl text-center font-bold text-sm transition-all text-romantic-gold">
+                        🦇 عدنان (باتمانك)
+                    </button>
+                    <span class="text-romantic-gold font-bold text-xs">أو</span>
+                    <button onclick="selectOption(this, 4)" class="w-1/2 p-3 bg-romantic-800/80 hover:bg-romantic-600 border border-romantic-500/40 rounded-xl text-center font-bold text-sm transition-all">
+                        👯‍♀️ البست فريند
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- GAME 4: Wheel of Fortune -->
+        <section class="glass-card rounded-3xl p-6 md:p-8 text-center glass-card-hover relative">
+            <h2 class="text-2xl font-bold text-romantic-gold mb-2 flex items-center justify-center gap-2">
+                <i class="fa-solid fa-dharmachakra"></i>
+                اللعبة الرابعة: عجلة الحظ الرومانسية 🎡
+            </h2>
+            <p class="text-sm text-romantic-200 mb-6">دوري العجلة واكتشفي شو الهدية أو الفعالية القادمة إلك!</p>
+
+            <div class="flex flex-col items-center justify-center space-y-6">
+                <!-- Wheel Pointer -->
+                <div class="relative flex justify-center items-center">
+                    <div class="absolute -top-4 z-20 text-romantic-gold text-3xl filter drop-shadow">
+                        <i class="fa-solid fa-location-pin fa-rotate-180"></i>
+                    </div>
+                    <canvas id="wheelCanvas" width="340" height="340"></canvas>
+                </div>
+
+                <button id="spinBtn" onclick="spinWheel()" class="px-8 py-3 bg-gradient-to-r from-romantic-gold to-romantic-golddark text-romantic-dark font-black rounded-full shadow-lg hover:brightness-110 transform active:scale-95 transition-all text-lg border border-yellow-200">
+                    <i class="fa-solid fa-rotate me-2"></i> لفّي العجلة!
+                </button>
+            </div>
+        </section>
+
+        <!-- Special Romantic Message Box -->
+        <section class="relative">
+            <!-- Decorative Hearts around box -->
+            <div class="absolute -top-6 -left-6 text-4xl text-romantic-500 opacity-80 animate-bounce">💌</div>
+            <div class="absolute -bottom-6 -right-6 text-4xl text-romantic-gold opacity-80 animate-pulse">👑</div>
+
+            <div class="glass-card rounded-3xl p-8 md:p-12 border-2 border-romantic-gold/50 shadow-2xl relative overflow-hidden text-center bg-gradient-to-b from-romantic-900/80 via-romantic-dark/95 to-romantic-900/80">
+                <!-- Subtle Bat/Heart Watermark Background -->
+                <div class="absolute inset-0 flex items-center justify-center opacity-5 pointer-events-none">
+                    <i class="fa-solid fa-heart text-[200px] text-romantic-gold"></i>
+                </div>
+
+                <div class="inline-block p-3 rounded-full bg-romantic-500/20 border border-romantic-gold/40 mb-6">
+                    <i class="fa-solid fa-envelope-open-text text-3xl text-romantic-gold"></i>
+                </div>
+
+                <h3 class="text-2xl md:text-3xl font-extrabold text-romantic-gold mb-6 tracking-wide">
+                    رسالة من القلب إلى أميرتي ✨
+                </h3>
+
+                <!-- The Exact Message Content -->
+                <div class="text-right text-base md:text-xl text-romantic-100 leading-loose font-medium space-y-4 max-w-3xl mx-auto bg-black/30 p-6 md:p-8 rounded-2xl border border-romantic-500/20">
+                    <p class="font-bold text-romantic-gold text-lg md:text-2xl border-b border-romantic-500/30 pb-3">
+                        إلى بنتي وحبيبتي وقلبي وعمري : رغودة قلبي ❤️
+                    </p>
+                    <p class="pt-2">
+                        حبيت اهديكي هاد الموقع حتى عبرلك عن كمية حبي الك اللي كل يوم بتزيد ...... 
+                    </p>
+                    <p>
+                        وقد ما عبرتلك وحكيتلك ما ح كون وفيتك حقك بجمالك ولطافتك يا رغودتي ..... 
+                    </p>
+                    <p>
+                        بدي منك تضلي مبسوطة دائما لانو انتي احلا شي اجا على دنيتنا ..... 
+                    </p>
+                    <p class="text-left font-bold text-romantic-gold text-lg md:text-xl pt-4">
+                        كل الحب الك يا اميرتي <br>
+                        المحب لك: <span class="underline decoration-romantic-500">عدنان</span> 💕
+                    </p>
+                    <p class="text-center text-xs text-romantic-200 opacity-75 pt-2 italic">
+                        ( نكوت على حضرتكم. 😉 )
+                    </p>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="w-full text-center py-6 text-xs text-romantic-200 z-10 border-t border-romantic-500/10 mt-12">
+        <p>مصنوع بكل حب لـ <span class="text-romantic-gold font-bold">رغد</span> من <span class="text-romantic-gold font-bold">عدنان (Batman)</span> 🦇❤️ 11/11</p>
+    </footer>
+
+    <!-- Result Modal Popup for Wheel of Fortune -->
+    <div id="resultModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="glass-card border-2 border-romantic-gold rounded-3xl p-8 max-w-sm w-full text-center shadow-2xl transform transition-all scale-95" id="modalCard">
+            <div class="text-5xl mb-4 animate-bounce">🎉</div>
+            <h3 class="text-xl font-bold text-romantic-gold mb-2">ربحتوا سوا!</h3>
+            <p id="modalResultText" class="text-2xl font-black text-white my-4 glow-text"></p>
+            <button onclick="closeModal()" class="mt-4 px-6 py-2 bg-romantic-600 hover:bg-romantic-500 text-white font-bold rounded-full transition-all border border-romantic-gold/30">
+                تم يا قلبي 💖
+            </button>
+        </div>
+    </div>
+
+    <!-- JavaScript Logic -->
+    <script>
+        /* --- 1. FLOATING HEARTS BACKGROUND --- */
+        const heartsBg = document.getElementById('heartsBg');
+        const heartIcons = ['❤️', '🦇', '💖', '✨', '🌹'];
+        for (let i = 0; i < 20; i++) {
+            const li = document.createElement('li');
+            li.className = 'floating-heart';
+            li.innerHTML = heartIcons[Math.floor(Math.random() * heartIcons.length)];
+            li.style.left = `${Math.random() * 100}%`;
+            li.style.animationDelay = `${Math.random() * 15}s`;
+            li.style.animationDuration = `${15 + Math.random() * 15}s`;
+            li.style.fontSize = `${16 + Math.random() * 20}px`;
+            heartsBg.appendChild(li);
+        }
+
+        /* --- 2. RELATIONSHIP ELAPSED COUNTER --- */
+        // Date: 13 / 9 / 2026
+        const startDate = new Date(2026, 8, 13, 0, 0, 0); // Month 8 is September in JS 0-indexed
+
+        function updateTimer() {
+            const now = new Date();
+            const diff = now - startDate;
+
+            if (diff > 0) {
+                // If the date has passed
+                const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+                const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
+                const minutes = Math.floor((diff / 1000 / 60) % 60);
+                const seconds = Math.floor((diff / 1000) % 60);
+
+                document.getElementById('days').innerText = days;
+                document.getElementById('hours').innerText = hours;
+                document.getElementById('minutes').innerText = minutes;
+                document.getElementById('seconds').innerText = seconds;
+            } else {
+                // If it's a countdown to the date
+                const absDiff = Math.abs(diff);
+                const days = Math.floor(absDiff / (1000 * 60 * 60 * 24));
+                const hours = Math.floor((absDiff / (1000 * 60 * 60)) % 24);
+                const minutes = Math.floor((absDiff / 1000 / 60) % 60);
+                const seconds = Math.floor((absDiff / 1000) % 60);
+
+                document.getElementById('days').innerText = days;
+                document.getElementById('hours').innerText = hours;
+                document.getElementById('minutes').innerText = minutes;
+                document.getElementById('seconds').innerText = seconds;
+            }
+        }
+        setInterval(updateTimer, 1000);
+        updateTimer();
+
+        /* --- 3. GAME 1: LOVE METER --- */
+        let currentLove = 0;
+        function boostLove() {
+            const bar = document.getElementById('loveBar');
+            const percentText = document.getElementById('lovePercentage');
+            const msg = document.getElementById('loveMessage');
+
+            if (currentLove < 100) {
+                currentLove += 25;
+            } else if (currentLove >= 100 && currentLove < 1000) {
+                currentLove += 225;
+            } else {
+                currentLove += 500;
+            }
+
+            bar.style.width = Math.min((currentLove / 1000) * 100, 100) + '%';
+            percentText.innerText = currentLove + '%';
+
+            if (currentLove === 25) msg.innerText = "بدأ المحرك يعبي حب! 🔥";
+            else if (currentLove === 50) msg.innerText = "وصلنا لنصف الطريق يا قمر! ❤️";
+            else if (currentLove === 75) msg.innerText = "الحب عم يفيض واكتمال الخزان قرب! 🚀";
+            else if (currentLove === 100) {
+                msg.innerText = "100%! حب كامل ولا ينتهي! 🎉";
+                fireConfetti();
+            } else {
+                msg.innerText = `عدّى الحدود! الحب صار ${currentLove}% واختل المقياس! 💥💖`;
+                fireConfetti();
+            }
+        }
+
+        /* --- 4. GAME 2: ADNAN PREFERENCES QUIZ --- */
+        let q1Score = { kabsa: false, coffee: false };
+
+        function checkQ1(choice, btn) {
+            const feedback = document.getElementById('q1Feedback');
+            if (choice === 'كبسة' || choice === 'قهوة') {
+                btn.classList.add('bg-emerald-700', 'border-emerald-400', 'text-white');
+                if (choice === 'كبسة') q1Score.kabsa = true;
+                if (choice === 'قهوة') q1Score.coffee = true;
+
+                if (q1Score.kabsa && q1Score.coffee) {
+                    feedback.innerText = "صح الصح! عدنان بيعشق الكبسة مع فنجان القهوة المميز ☕✨";
+                    fireConfetti();
+                } else {
+                    feedback.innerText = "ممتاز! هاد واحد من الشغلتين اللي بيعشقهم عدنان، شو هي الثانية؟ 😉";
+                }
+            } else {
+                btn.classList.add('bg-rose-900/60', 'border-rose-500', 'line-through');
+                feedback.innerText = "لأ هادي مو الخيار الأول لعدنان، جربي خيار ثاني! 😜";
+            }
+        }
+
+        function checkQ2(choice, btn) {
+            const feedback = document.getElementById('q2Feedback');
+            btn.classList.add('bg-emerald-700', 'border-emerald-400');
+            feedback.innerText = "جوابك صح! الجواب هو (كلهم سوا!) عدنان بيعشق عيونك وشفايفك وقلبك وكل تفاصيلك! ❤️👑";
+            fireConfetti();
+        }
+
+        function checkQ3(choice, btn) {
+            const feedback = document.getElementById('q3Feedback');
+            if (choice === 'السفر') {
+                btn.classList.add('bg-emerald-700', 'border-emerald-400');
+                feedback.innerText = "إجابة صحيحة! السفر واستكشاف العالم معك هو شغف عدنان الأكبر! ✈️🌍";
+                fireConfetti();
+            } else {
+                btn.classList.add('bg-rose-900/60', 'border-rose-500');
+                feedback.innerText = "قريبة بس السفر هو العشق الأول لعدنان! 🧳";
+            }
+        }
+
+        /* --- 5. GAME 3: WOULD YOU RATHER --- */
+        function selectOption(btn, questionId, isBatman = false) {
+            const parent = btn.parentElement;
+            const buttons = parent.querySelectorAll('button');
+            buttons.forEach(b => {
+                b.classList.remove('bg-romantic-500', 'border-romantic-gold', 'scale-105');
+                b.classList.add('bg-romantic-800/80', 'opacity-60');
+            });
+
+            btn.classList.remove('opacity-60', 'bg-romantic-800/80');
+            btn.classList.add('bg-romantic-500', 'border-romantic-gold', 'scale-105');
+
+            if (isBatman) {
+                fireConfetti();
+            }
+        }
+
+        /* --- 6. GAME 4: WHEEL OF FORTUNE --- */
+        const canvas = document.getElementById('wheelCanvas');
+        const ctx = canvas.getContext('2d');
+        const options = [
+            'عشاء مع بعض 🍝',
+            'سفرة مع بعض ✈️',
+            'حضن 48 ساعة 🫂',
+            'بوسات لا نهائية 💋'
+        ];
+        const colors = ['#9f1239', '#be123c', '#e11d48', '#881337'];
+        let startAngle = 0;
+        const arc = Math.PI / (options.length / 2);
+        let spinTimeout = null;
+        let isSpinning = false;
+
+        function drawWheel() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            const outsideRadius = 150;
+            const textRadius = 105;
+            const insideRadius = 35;
+
+            ctx.strokeStyle = "#fbbf24";
+            ctx.lineWidth = 4;
+
+            for (let i = 0; i < options.length; i++) {
+                const angle = startAngle + i * arc;
+                ctx.fillStyle = colors[i];
+
+                ctx.beginPath();
+                ctx.arc(170, 170, outsideRadius, angle, angle + arc, false);
+                ctx.arc(170, 170, insideRadius, angle + arc, angle, true);
+                ctx.stroke();
+                ctx.fill();
+
+                ctx.save();
+                ctx.shadowColor = "rgba(0, 0, 0, 0.5)";
+                ctx.shadowBlur = 4;
+                ctx.fillStyle = "#ffffff";
+                ctx.font = "bold 15px Cairo, sans-serif";
+                
+                ctx.translate(
+                    170 + Math.cos(angle + arc / 2) * textRadius,
+                    170 + Math.sin(angle + arc / 2) * textRadius
+                );
+                ctx.rotate(angle + arc / 2 + Math.PI / 2);
+                const text = options[i];
+                ctx.fillText(text, -ctx.measureText(text).width / 2, 0);
+                ctx.restore();
+            }
+
+            // Center circle decoration
+            ctx.beginPath();
+            ctx.arc(170, 170, insideRadius, 0, Math.PI * 2, false);
+            ctx.fillStyle = "#1a050b";
+            ctx.fill();
+            ctx.strokeStyle = "#fbbf24";
+            ctx.lineWidth = 3;
+            ctx.stroke();
+
+            // Center Heart Icon
+            ctx.fillStyle = "#fbbf24";
+            ctx.font = "18px FontAwesome";
+            ctx.fillText("❤️", 161, 176);
+        }
+
+        drawWheel();
+
+        let spinTime = 0;
+        let spinTimeTotal = 0;
+
+        function spinWheel() {
+            if (isSpinning) return;
+            isSpinning = true;
+            spinAngleStart = Math.random() * 10 + 20;
+            spinTime = 0;
+            spinTimeTotal = Math.random() * 3000 + 4000;
+            rotateWheel();
+        }
+
+        function rotateWheel() {
+            spinTime += 30;
+            if (spinTime >= spinTimeTotal) {
+                stopRotateWheel();
+                return;
+            }
+            const spinAngle = spinAngleStart - easeOut(spinTime, 0, spinAngleStart, spinTimeTotal);
+            startAngle += (spinAngle * Math.PI / 180);
+            drawWheel();
+            spinTimeout = setTimeout(rotateWheel, 30);
+        }
+
+        function stopRotateWheel() {
+            clearTimeout(spinTimeout);
+            const degrees = startAngle * 180 / Math.PI + 90;
+            const arcd = arc * 180 / Math.PI;
+            const index = Math.floor((360 - degrees % 360) / arcd);
+            const actualIndex = (index < 0) ? index + options.length : index;
+            
+            showResult(options[actualIndex]);
+            isSpinning = false;
+        }
+
+        function easeOut(t, b, c, d) {
+            const ts = (t /= d) * t;
+            const tc = ts * t;
+            return b + c * (tc + -3 * ts + 3 * t);
+        }
+
+        function showResult(text) {
+            document.getElementById('modalResultText').innerText = text;
+            const modal = document.getElementById('resultModal');
+            const card = document.getElementById('modalCard');
+            modal.classList.remove('hidden');
+            setTimeout(() => {
+                card.classList.remove('scale-95');
+                card.classList.add('scale-100');
+            }, 10);
+            fireConfetti();
+        }
+
+        function closeModal() {
+            const modal = document.getElementById('resultModal');
+            const card = document.getElementById('modalCard');
+            card.classList.remove('scale-100');
+            card.classList.add('scale-95');
+            setTimeout(() => {
+                modal.classList.add('hidden');
+            }, 200);
+        }
+
+        /* --- 7. UTILS: CONFETTI EFFECT --- */
+        function fireConfetti() {
+            if (typeof confetti === 'function') {
+                confetti({
+                    particleCount: 80,
+                    spread: 70,
+                    origin: { y: 0.6 },
+                    colors: ['#e11d48', '#fbbf24', '#ffffff', '#be123c']
+                });
+            }
+        }
+    </script>
+</body>
+</html>
